@@ -57,6 +57,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database configuration
 if config('DATABASE_URL', default=None):
+    # Support both PostgreSQL and MySQL URLs
     DATABASES = {
         'default': dj_database_url.config(
             default=config('DATABASE_URL'),
@@ -64,7 +65,24 @@ if config('DATABASE_URL', default=None):
             conn_health_checks=True,
         )
     }
+elif config('DB_ENGINE', default=None) == 'mysql':
+    # MySQL configuration for Hostinger
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': config('DB_NAME'),
+            'USER': config('DB_USER'),
+            'PASSWORD': config('DB_PASSWORD'),
+            'HOST': config('DB_HOST'),
+            'PORT': config('DB_PORT', default='3306'),
+            'OPTIONS': {
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+                'charset': 'utf8mb4',
+            },
+        }
+    }
 else:
+    # SQLite fallback for local development
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
