@@ -51,6 +51,8 @@ export default function BusinessForm() {
   
   const [toolInput, setToolInput] = useState('')
   const [success, setSuccess] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
   const navigate = useNavigate()
 
   const addTask = () => {
@@ -88,6 +90,11 @@ export default function BusinessForm() {
   }
 
   const handleSubmit = async () => {
+    if (loading) return // Prevent multiple submissions
+    
+    setLoading(true)
+    setError('')
+    
     try {
       const businessRes = await api.post('/businesses/list/', businessData)
       const businessId = businessRes.data.id
@@ -108,9 +115,11 @@ export default function BusinessForm() {
       
       setSuccess(true)
       setTimeout(() => navigate('/submissions'), 2000)
-    } catch (error) {
-      console.error('Failed to submit:', error)
-      alert('Failed to submit form. Please try again.')
+    } catch (err: any) {
+      console.error('Failed to submit:', err)
+      const errorMessage = err.response?.data?.detail || err.message || 'Failed to submit form. Please check your connection and try again.'
+      setError(errorMessage)
+      setLoading(false)
     }
   }
 
@@ -140,6 +149,23 @@ export default function BusinessForm() {
         </div>
 
         <div className="bg-white p-4 sm:p-8 rounded-lg shadow-lg">
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className="text-red-800 font-semibold mb-1">Submission Error</h3>
+                  <p className="text-red-700 text-sm">{error}</p>
+                </div>
+                <button
+                  onClick={() => setError('')}
+                  className="text-red-600 hover:text-red-800 text-xl font-bold"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+          )}
+          
           {step === 1 && (
             <div className="space-y-5 sm:space-y-6">
               <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Business Profile</h2>
@@ -497,9 +523,10 @@ export default function BusinessForm() {
             ) : (
               <button
                 onClick={handleSubmit}
-                className="w-full sm:w-auto px-6 py-3 sm:py-2 text-base bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium order-1 sm:order-2"
+                disabled={loading}
+                className="w-full sm:w-auto px-6 py-3 sm:py-2 text-base bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium order-1 sm:order-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Submit
+                {loading ? 'Submitting...' : 'Submit'}
               </button>
             )}
           </div>

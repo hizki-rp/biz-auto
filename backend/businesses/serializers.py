@@ -1,12 +1,6 @@
 from rest_framework import serializers
 from .models import Business, Submission, Task, PainPoint
 
-class BusinessSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Business
-        fields = '__all__'
-        read_only_fields = ['created_at', 'updated_at']
-
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
@@ -28,3 +22,11 @@ class SubmissionSerializer(serializers.ModelSerializer):
         model = Submission
         fields = '__all__'
         read_only_fields = ['status', 'created_at', 'updated_at']
+
+class BusinessSerializer(serializers.ModelSerializer):
+    submissions = SubmissionSerializer(many=True, read_only=True)
+    
+    class Meta:
+        model = Business
+        fields = '__all__'
+        read_only_fields = ['created_at', 'updated_at']

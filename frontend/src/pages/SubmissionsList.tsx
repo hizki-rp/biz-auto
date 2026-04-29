@@ -58,22 +58,37 @@ export default function SubmissionsList() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Size</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Location</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {businesses.map((business) => (
-                <tr key={business.id}>
+                <tr key={business.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap font-medium">{business.name}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{business.industry}</td>
+                  <td className="px-6 py-4 whitespace-nowrap capitalize">{business.industry}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{business.size}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{business.location}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(business.created_at).toLocaleDateString()}
                   </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <Link
+                      to={`/business/${business.id}`}
+                      className="text-blue-600 hover:text-blue-800 font-medium"
+                    >
+                      View Details →
+                    </Link>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          
+          {businesses.length === 0 && (
+            <div className="text-center py-12 text-gray-500">
+              No submissions yet. Create your first submission!
+            </div>
+          )}
         </div>
       </div>
     </div>
