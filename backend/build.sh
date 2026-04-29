@@ -2,7 +2,8 @@
 # exit on error
 set -o errexit
 
-pip install -r requirements.txt
+# Install production requirements (includes PostgreSQL)
+pip install -r requirements-prod.txt
 
 python manage.py collectstatic --no-input
 python manage.py migrate
