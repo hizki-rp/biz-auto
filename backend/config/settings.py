@@ -3,6 +3,13 @@ from decouple import config
 import dj_database_url
 import os
 
+# PyMySQL setup for MySQL support
+try:
+    import pymysql
+    pymysql.install_as_MySQLdb()
+except ImportError:
+    pass
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-change-this-in-production')
