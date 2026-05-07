@@ -96,28 +96,28 @@ export default function BusinessForm() {
     setError('')
     
     try {
-      const businessRes = await api.post('/businesses/list/', businessData)
+      const businessRes = await api.post('/businesses.php', businessData)
       const businessId = businessRes.data.id
       
-      const submissionRes = await api.post('/businesses/submissions/', {
+      const submissionRes = await api.post('/submissions.php', {
         business: businessId,
         ...submissionData,
       })
       const submissionId = submissionRes.data.id
       
       for (const task of tasks) {
-        await api.post(`/businesses/submissions/${submissionId}/add_task/`, task)
+        await api.post(`/tasks.php?submission_id=${submissionId}`, task)
       }
       
       for (const painPoint of painPoints) {
-        await api.post(`/businesses/submissions/${submissionId}/add_pain_point/`, painPoint)
+        await api.post(`/pain_points.php?submission_id=${submissionId}`, painPoint)
       }
       
       setSuccess(true)
       setTimeout(() => navigate('/submissions'), 2000)
     } catch (err: any) {
       console.error('Failed to submit:', err)
-      const errorMessage = err.response?.data?.detail || err.message || 'Failed to submit form. Please check your connection and try again.'
+      const errorMessage = err.response?.data?.error || err.message || 'Failed to submit form. Please check your connection and try again.'
       setError(errorMessage)
       setLoading(false)
     }

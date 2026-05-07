@@ -10,8 +10,8 @@ export default function SubmissionsList() {
     const fetchData = async () => {
       try {
         const [businessesRes, analyticsRes] = await Promise.all([
-          api.get('/businesses/list/'),
-          api.get('/analytics/'),
+          api.get('/businesses.php'),
+          api.get('/analytics.php'),
         ])
         setBusinesses(businessesRes.data.results || businessesRes.data)
         setAnalytics(analyticsRes.data)

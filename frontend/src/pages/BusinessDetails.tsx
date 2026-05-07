@@ -53,7 +53,7 @@ export default function BusinessDetails() {
   useEffect(() => {
     const fetchBusiness = async () => {
       try {
-        const response = await api.get(`/businesses/list/${id}/`)
+        const response = await api.get(`/businesses.php?id=${id}`)
         setBusiness(response.data)
       } catch (err: any) {
         console.error('Failed to fetch business:', err)
