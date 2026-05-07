@@ -1,8 +1,8 @@
 <?php
 // Database configuration
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'u170619435_hostdb');
-define('DB_USER', 'u170619435_host');
+define('DB_NAME', 'u170619435_survey');
+define('DB_USER', 'u170619435_survey');
 define('DB_PASS', 'Rdplayer@1');
 
 // CORS headers for React frontend
